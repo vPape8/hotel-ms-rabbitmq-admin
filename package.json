@@ -1,0 +1,27 @@
+{
+	"name": "hotel-ms-rabbitmq-admin",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Microservicio administrador de RabbitMQ: crea y elimina colas, exchanges y bindings vía REST",
+	"main": "dist/src/index.js",
+	"scripts": {
+		"build": "tsc -p tsconfig.json",
+		"start": "node dist/src/index.js",
+		"test": "npm run build && node --test dist/**/*.test.js"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"dependencies": {
+		"amqplib": "^0.10.9",
+		"dotenv": "^16.6.1",
+		"express": "^4.22.3",
+		"jose": "^5.10.0"
+	},
+	"devDependencies": {
+		"@types/amqplib": "^0.10.8",
+		"@types/express": "^5.0.6",
+		"@types/node": "^22.20.5",
+		"typescript": "^5.9.3"
+	}
+}
