@@ -13,7 +13,7 @@ class RabbitAdminFalso implements RabbitAdmin {
 	async listarColas() { return []; }
 	async crearCola(dto: CrearColaDto) { this.colas.push(dto); return { name: dto.name, messages: 0, consumers: 0 }; }
 	async eliminarCola(nombre: string) {
-		if (nombre === 'hotel.reportes.queue') throw new RecursoProtegidoError('protegida');
+		if (nombre === 'hotel.reportes.pdf.queue') throw new RecursoProtegidoError('protegida');
 		if (nombre === 'no-existe') throw new RecursoNoEncontradoError('no existe');
 		return { messagesDeleted: 3 };
 	}
@@ -63,7 +63,7 @@ test('API del administrador de RabbitMQ', async (contexto) => {
 	});
 
 	await contexto.test('traduce errores del servicio a códigos HTTP', async () => {
-		assert.equal((await fetch(`${base}/queues/hotel.reportes.queue`, { method: 'DELETE' })).status, 409);
+		assert.equal((await fetch(`${base}/queues/hotel.reportes.pdf.queue`, { method: 'DELETE' })).status, 409);
 		assert.equal((await fetch(`${base}/queues/no-existe`, { method: 'DELETE' })).status, 404);
 		assert.equal((await fetch(`${base}/queues/otra?ifEmpty=quizas`, { method: 'DELETE' })).status, 400);
 		assert.equal((await fetch(`${base}/queues/otra?ifEmpty=true`, { method: 'DELETE' })).status, 200);

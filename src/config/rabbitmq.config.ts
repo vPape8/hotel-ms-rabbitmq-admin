@@ -20,21 +20,23 @@ export const rabbitAdminConfig = {
 	protegidos: {
 		exchanges: lista(process.env.RABBITMQ_EXCHANGES_PROTEGIDOS, [
 			'hotel.reservas.exchange',
-			'hotel.documentos.exchange',
+			'hotel.reportes.fanout',
+			'hotel.reportes.direct',
 			'hotel.reintentos.exchange',
 			'hotel.dlx'
 		]),
 		colas: lista(process.env.RABBITMQ_COLAS_PROTEGIDAS, [
 			'hotel.reservas.confirmacion.queue',
 			'hotel.reservas.confirmacion.queue.retry',
-			'hotel.reservas.confirmacion.dlq',
-			'hotel.reportes.queue',
-			'hotel.reportes.queue.retry',
-			'hotel.reportes.dlq',
-			'hotel.notificaciones.queue',
-			'hotel.notificaciones.queue.retry',
-			'hotel.notificaciones.dlq',
-			'hotel.no-entregados.dlq'
+			'hotel.reservas.registro.queue',
+			'hotel.reservas.registro.queue.retry',
+			'hotel.reportes.pdf.queue',
+			'hotel.reportes.pdf.queue.retry',
+			'hotel.reportes.aviso.queue',
+			'hotel.reportes.aviso.queue.retry',
+			'hotel.reportes.mail.queue',
+			'hotel.reportes.mail.queue.retry',
+			'hotel.dlq'
 		])
 	}
 } as const;
