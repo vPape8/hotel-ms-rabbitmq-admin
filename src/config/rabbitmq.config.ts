@@ -4,6 +4,10 @@ function lista(variable: string | undefined, porDefecto: string[]): string[] {
 	return variable ? variable.split(',').map((valor) => valor.trim()).filter(Boolean) : porDefecto;
 }
 
+function colasConReintentoYDlq(colas: string[]): string[] {
+	return colas.flatMap((cola) => [cola, `${cola}.retry`, `${cola}.dlq`]);
+}
+
 export const rabbitAdminConfig = {
 	/** Conexión AMQP para crear/eliminar recursos. */
 	url: process.env.RABBITMQ_URL ?? 'amqp://guest:guest@localhost:5672',
@@ -25,18 +29,17 @@ export const rabbitAdminConfig = {
 			'hotel.reintentos.exchange',
 			'hotel.dlx'
 		]),
+		// Cada cola de trabajo con su cola de reintento (.retry) y su DLQ propia (.dlq).
 		colas: lista(process.env.RABBITMQ_COLAS_PROTEGIDAS, [
-			'hotel.reservas.confirmacion.queue',
-			'hotel.reservas.confirmacion.queue.retry',
-			'hotel.reservas.registro.queue',
-			'hotel.reservas.registro.queue.retry',
-			'hotel.reportes.pdf.queue',
-			'hotel.reportes.pdf.queue.retry',
-			'hotel.reportes.aviso.queue',
-			'hotel.reportes.aviso.queue.retry',
-			'hotel.reportes.mail.queue',
-			'hotel.reportes.mail.queue.retry',
-			'hotel.dlq'
+			...colasConReintentoYDlq([
+				'hotel.reservas.confirmacion.queue',
+				'hotel.reservas.estado.queue',
+				'hotel.reservas.registro.queue',
+				'hotel.reportes.pdf.queue',
+				'hotel.reportes.aviso.queue',
+				'hotel.reportes.mail.queue'
+			]),
+			'hotel.no-entregados.dlq'
 		])
 	}
 } as const;
